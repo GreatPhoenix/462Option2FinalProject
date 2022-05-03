@@ -12,7 +12,6 @@ class_names = ['Like','Dislike']
 
 dataSet = pd.read_csv("C:/Users/bcwhi/Documents/GitHub/462Option2FinalProject/tfTrainData.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
 testDataSet = pd.read_csv("C:/Users/bcwhi/Documents/GitHub/462Option2FinalProject/tfTestData.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
-#print(dataSet.head())
 
 dataSetFeatures = dataSet.copy()
 dataSetLabels = dataSetFeatures.pop('liked')
@@ -20,29 +19,35 @@ dataSetLabels = dataSetFeatures.pop('liked')
 testdataSetFeatures = testDataSet.copy()
 testdataSetLabels = testdataSetFeatures.pop('liked')
 
+
+
 dataSetFeatures = np.array(dataSetFeatures)
 
 testdataSetFeatures = np.array(testdataSetFeatures)
 
+
+
 spotModel = tf.keras.Sequential([
-    layers.Dense(32, activation = 'relu', input_dim =  13),
-    layers.Dense(64, activation = 'relu'),
-    layers.Dense(1)
+    layers.BatchNormalization(),
+    layers.Dense(10, activation = 'relu', input_dim =  13),
+    layers.Dense(20, activation = 'relu'),
+    layers.Dense(30, activation = 'relu'),
+    layers.Dense(1, activation='sigmoid')
 ])
 
-spotModel.compile(loss = tf.keras.losses.MeanSquaredError(), optimizer = tf.optimizers.Adam(), metrics= 'accuracy')
+spotModel.compile(loss = tf.keras.losses.BinaryCrossentropy(), optimizer = tf.optimizers.Adam(), metrics= 'accuracy')
 
-spotModel.fit(dataSetFeatures, dataSetLabels, epochs = epochsVal, batch_size = 100)
+spotModel.fit(dataSetFeatures, dataSetLabels, epochs = epochsVal, batch_size = 100, validation_split=0.1)
 
-#spotModel.save('spotModel')
 
 loss, acc = spotModel.evaluate(testdataSetFeatures, testdataSetLabels, verbose=1)
 print('Model, accuracy: {:5.2f}%'.format(100 * acc))
 
-spotModel.save('C:/Users/bcwhi/Documents/GitHub/462Option2FinalProject/spot')
+spotModel.save('spot')
 
 predTest = spotModel.predict(testdataSetFeatures)
+for index, probability in enumerate (predTest[0]):
+    print(f'{index}: {probability:.10%}')
+
 predTest = [0 if val < 0.5 else 1 for val in predTest]
 print(predTest)
-#print(dataSetFeatures)
-#print(spotModel.summary())
