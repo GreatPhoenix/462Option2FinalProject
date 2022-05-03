@@ -4,7 +4,6 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-from sklearn.metrics import accuracy_score
 
 epochsVal = 100
 
