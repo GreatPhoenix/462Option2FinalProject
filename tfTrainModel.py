@@ -9,8 +9,8 @@ epochsVal = 100
 
 class_names = ['Like','Dislike']
 
-dataSet = pd.read_csv("C:/Users/bcwhi/Documents/GitHub/462Option2FinalProject/tfTrainData.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
-testDataSet = pd.read_csv("C:/Users/bcwhi/Documents/GitHub/462Option2FinalProject/tfxtest.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
+dataSet = pd.read_csv("C:/Users/sammy/OneDrive/Documents/GitHub/462Option2FinalProject/tfTrainData.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
+testDataSet = pd.read_csv("C:/Users/sammy/OneDrive/Documents/GitHub/462Option2FinalProject/tfxtest.csv", names=["danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","duration_ms","time_signature","liked"])
 
 dataSetFeatures = dataSet.copy()
 dataSetLabels = dataSetFeatures.pop('liked')
@@ -43,3 +43,6 @@ spotModel.save('spot')
 predTest = spotModel.predict(testdataSetFeatures)
 predTest = [0 if val < 0.5 else 1 for val in predTest]
 print(predTest)
+
+# df = pd.DataFrame({"Liked" : predTest})
+# df.to_csv("NN_out_new2.csv", index=False)
